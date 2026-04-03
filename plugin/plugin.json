@@ -1,0 +1,5 @@
+{
+  "name": "claude-companion-minecraft",
+  "description": "A Minecraft companion that lives in your Claude Code statusline — reacts to tests, commits, and dangerous commands with animated braille sprites and quips.",
+  "version": "1.0.0"
+}
