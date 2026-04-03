@@ -1,8 +1,8 @@
-// Hand-crafted 3×3 braille sprites for Minecraft companions.
-// Each braille char is a 2×4 dot grid, so 3×3 chars = 6×12 dots.
-// Colors are per-character so sprites can have multiple colors.
+// Hand-crafted 3×3 sprites for Minecraft companions.
+// Mixes braille, block elements, box drawing, and geometric shapes.
+// Braille chars flash during animation; structural chars stay stable.
 
-const R = '\x1b[0m' // reset
+const RS = '\x1b[0m' // reset
 
 // Color palette
 const G = '\x1b[32m'   // green
@@ -22,26 +22,26 @@ const GR = '\x1b[90m'  // gray
 
 // Per-character color grid: 3 lines × 3 colors, parallel to SPRITES
 export const SPRITE_CHAR_COLORS: Record<number, string[][]> = {
-  1:  [[BG, BG, BG], [BG, G,  BG], [G,  G,  G ]],   // Creeper — bright green body, dark green eyes
-  2:  [[BM, BM, BM], [BM, BM, BM], [BM, BM, BM]],   // Pig — pink all over
+  1:  [[BG, BG, BG], [BG, G,  BG], [G,  G,  G ]],   // Creeper — bright green, dark eyes
+  2:  [[BM, BM, BM], [BM, BM, BM], [BM, BM, BM]],   // Pig — pink
   3:  [[W,  BW, W ], [W,  BW, W ], [BY, BY, BY]],    // Chicken — white body, yellow legs
   4:  [[G,  G,  G ], [BL, BL, BL], [GR, GR, GR]],    // Zombie — green head, blue shirt, gray legs
-  5:  [[BW, BW, BW], [BW, BW, Y ], [GR, GR, GR]],    // Skeleton — white bones, yellow bow, gray legs
-  6:  [[W,  Y,  W ], [BW, Y,  BW], [W,  W,  W ]],    // Cow — white with brown spots
-  7:  [[BG, BG, BG], [Y,  Y,  Y ], [Y,  Y,  Y ]],    // Dirt Block — green grass top, brown dirt
+  5:  [[BW, BW, BW], [Y,  BW, Y ], [GR, GR, GR]],    // Skeleton — white bones, brown bow
+  6:  [[W,  Y,  W ], [BW, Y,  BW], [Y,  Y,  Y ]],    // Cow — white+brown patches
+  7:  [[BG, BG, BG], [Y,  Y,  Y ], [Y,  Y,  Y ]],    // Dirt Block — green grass, brown dirt
   8:  [[GR, GR, GR], [GR, GR, GR], [Y,  Y,  Y ]],    // Wooden Sword — gray blade, brown handle
-  9:  [[RD, RD, RD], [RD, BR, RD], [RD, RD, RD]],    // Spider — dark red, bright red eyes
-  10: [[BW, BW, BW], [BW, G,  BW], [BW, BW, BW]],    // Iron Golem — iron body, green vine
-  11: [[GR, GR, GR], [W,  BW, W ], [W,  W,  W ]],    // Wolf — gray ears, white body
-  12: [[BW, BW, BW], [BW, BW, BW], [Y,  Y,  Y ]],    // Iron Sword — bright white blade, brown handle
-  13: [[BR, BR, BR], [BW, BW, BW], [BR, BR, BR]],    // TNT — red block, white label stripe
-  14: [[M,  M,  M ], [M,  BM, M ], [M,  M,  M ]],    // Enderman — dark purple, pink eyes
-  15: [[BY, BY, BY], [Y,  BY, Y ], [BY, BY, BY]],     // Blaze — yellow rods, bright yellow core
+  9:  [[RD, RD, RD], [BR, BR, BR], [RD, RD, RD]],    // Spider — dark red, bright red eyes
+  10: [[BW, BW, BW], [BW, G,  BW], [BW, BW, BW]],    // Iron Golem — iron, green vine
+  11: [[GR, W,  GR], [W,  BW, W ], [W,  W,  W ]],    // Wolf — gray ears, white body
+  12: [[BW, BW, BW], [BW, BW, BW], [Y,  Y,  Y ]],    // Iron Sword — white blade, brown handle
+  13: [[BR, BR, BR], [BW, BR, BW], [BR, BR, BR]],    // TNT — red, white label
+  14: [[M,  M,  M ], [M,  BM, M ], [M,  M,  M ]],    // Enderman — purple, pink eyes
+  15: [[BY, BY, BY], [Y,  BY, Y ], [BY, BY, BY]],     // Blaze — yellow/orange fire
   16: [[BC, BC, BC], [BC, BC, BC], [Y,  Y,  Y ]],     // Diamond Sword — cyan blade, brown handle
-  17: [[GR, GR, W ], [GR, GR, GR], [GR, GR, GR]],    // Wither Skeleton — gray body, white sword tip
-  18: [[C,  C,  C ], [C,  BC, C ], [C,  C,  C ]],     // Warden — teal body, bright cyan sculk
+  17: [[GR, GR, W ], [GR, GR, GR], [GR, GR, GR]],    // Wither Skeleton — gray, white sword
+  18: [[C,  C,  C ], [C,  BC, C ], [C,  C,  C ]],     // Warden — teal, bright sculk
   19: [[GR, M,  GR], [M,  M,  M ], [M,  M,  M ]],    // Ender Dragon — gray wings, purple body
-  20: [[M,  M,  M ], [M,  BM, M ], [M,  M,  M ]],    // Dragon Egg — dark purple, pink speckle
+  20: [[M,  M,  M ], [M,  BM, M ], [M,  M,  M ]],    // Dragon Egg — purple, pink speckle
 }
 
 export function colorizeSprite(sprite: string[], companionId: number): string[] {
@@ -52,130 +52,130 @@ export function colorizeSprite(sprite: string[], companionId: number): string[] 
     const lineColors = colors[lineIdx] ?? []
     return chars.map((ch, i) => {
       const color = lineColors[i]
-      return color ? `${color}${ch}${R}` : ch
+      return color ? `${color}${ch}${RS}` : ch
     }).join('')
   })
 }
 
 export const SPRITES: Record<number, string[]> = {
-  // Creeper — square face with dark eyes and frown
+  // Creeper — THE iconic face: shaded sides, dark eyes, split legs
   1: [
-    '⣏⠉⣹',
-    '⣿⠛⣿',
-    '⠛⠀⠛',
+    '▓░▓',
+    '▓█▓',
+    '▀ ▀',
   ],
-  // Pig — round body with snout
+  // Pig — round pink body with snout
   2: [
-    '⢀⣴⡄',
-    '⣿⣭⣿',
-    '⠘⠃⠘',
+    '▗█▖',
+    '█◘█',
+    '▝▀▘',
   ],
-  // Chicken — small body on legs
+  // Chicken — small bird with beak
   3: [
-    '⠀⣴⠀',
-    '⢰⣿⡆',
-    '⠀⠛⠀',
+    ' ▲ ',
+    '▐█▌',
+    ' ╨ ',
   ],
-  // Zombie — humanoid with arms out
+  // Zombie — humanoid, arms stretched forward
   4: [
-    '⢀⣤⡄',
-    '⠈⣿⠁',
-    '⠀⠛⠀',
+    '▄█▄',
+    '═█═',
+    ' ╫ ',
   ],
-  // Skeleton — thin humanoid with bow
+  // Skeleton — thin bony figure with bow
   5: [
-    '⠀⣶⠀',
-    '⢸⡏⡆',
-    '⠀⠛⠀',
+    ' ○ ',
+    '┤█╱',
+    ' ╫ ',
   ],
   // Cow — wide body with horns
   6: [
-    '⠺⣤⠗',
-    '⣿⣿⣿',
-    '⠛⠀⠛',
+    '╲█╱',
+    '▓█▓',
+    '╨ ╨',
   ],
-  // Dirt Block — solid textured square
+  // Dirt Block — grass top, dirt layers
   7: [
-    '⣿⣿⣿',
-    '⣶⣶⣶',
-    '⣤⣤⣤',
+    '▓▓▓',
+    '▒▒▒',
+    '░░░',
   ],
-  // Wooden Sword — diagonal blade
+  // Wooden Sword — angled blade with crossguard
   8: [
-    '⠀⠀⢰',
-    '⠀⡰⠀',
-    '⡘⠀⠀',
+    ' ◇ ',
+    ' │ ',
+    ' ╪ ',
   ],
   // Spider — wide low body with legs
   9: [
-    '⠀⣤⠀',
-    '⢿⣿⡿',
-    '⠉⠀⠉',
+    '╲▄╱',
+    '●█●',
+    '╱ ╲',
   ],
-  // Iron Golem — big top, narrow bottom
+  // Iron Golem — massive top, narrow base
   10: [
-    '⣿⣿⣿',
-    '⠘⣿⠃',
-    '⠀⠛⠀',
+    '███',
+    '▐█▌',
+    ' █ ',
   ],
-  // Wolf — four-legged with tail
+  // Wolf — pointed ears, body, legs
   11: [
-    '⡤⣤⠀',
-    '⣿⣿⡆',
-    '⠛⠀⠛',
+    '▲▄ ',
+    '██▌',
+    '╨ ╨',
   ],
-  // Iron Sword — vertical blade
+  // Iron Sword — straight blade, crossguard
   12: [
-    '⠀⠠⠀',
-    '⠀⡇⠀',
-    '⠀⠛⠀',
+    ' △ ',
+    ' │ ',
+    ' ╪ ',
   ],
-  // TNT — block with stripe
+  // TNT — striped block with label
   13: [
-    '⣿⣿⣿',
-    '⣤⣭⣤',
-    '⣿⣿⣿',
+    '█▓█',
+    '░█░',
+    '█▓█',
   ],
-  // Enderman — tall thin with eyes
+  // Enderman — tall thin dark figure
   14: [
-    '⠀⣷⠀',
-    '⠀⡿⠀',
-    '⠀⠛⠀',
+    '┌█┐',
+    ' █ ',
+    ' ╨ ',
   ],
-  // Blaze — floating with rods
+  // Blaze — floating rods around core
   15: [
-    '⡇⣶⢸',
-    '⠀⣿⠀',
-    '⡇⠛⢸',
+    '╱█╲',
+    '⣿█⣿',
+    '╲█╱',
   ],
-  // Diamond Sword — shiny blade
+  // Diamond Sword — diamond-shaped blade
   16: [
-    '⠀⠀⢰',
-    '⠀⡰⠀',
-    '⡞⠀⠀',
+    ' ◆ ',
+    ' │ ',
+    ' ╪ ',
   ],
-  // Wither Skeleton — thin with stone sword
+  // Wither Skeleton — dark figure with stone sword
   17: [
-    '⠀⣶⡆',
-    '⠀⡏⠀',
-    '⠀⠛⠀',
+    '┌█╲',
+    ' █ ',
+    ' ╨ ',
   ],
-  // Warden — wide dark mass
+  // Warden — wide dark mass, sculk horns
   18: [
-    '⣰⣶⣆',
-    '⣿⣿⣿',
-    '⣿⠉⣿',
+    '▓█▓',
+    '███',
+    '█░█',
   ],
-  // Ender Dragon — winged
+  // Ender Dragon — wings spread wide
   19: [
-    '⡇⣿⢸',
-    '⠀⣿⠀',
-    '⠀⢻⠀',
+    '╱█╲',
+    ' █ ',
+    ' ▽ ',
   ],
   // Dragon Egg — oval shape
   20: [
-    '⠀⣶⠀',
-    '⢸⣿⡇',
-    '⠀⣿⠀',
+    ' ▄ ',
+    '▐█▌',
+    ' ▀ ',
   ],
 }
