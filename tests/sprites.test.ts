@@ -63,17 +63,17 @@ describe('SPRITE_CHAR_COLORS', () => {
 
 describe('colorizeSprite', () => {
   it('wraps each character with its own color', () => {
-    const sprite = SPRITES[7]! // Dirt Block — green top, brown bottom
-    const colored = colorizeSprite(sprite, 7)
-    // First line should have bright green (grass)
+    const sprite = SPRITES[1]! // Creeper — bright green + dark green
+    const colored = colorizeSprite(sprite, 1)
+    // Should have bright green
     expect(colored[0]).toContain('\x1b[92m')
-    // Third line should have yellow (brown dirt)
-    expect(colored[2]).toContain('\x1b[33m')
+    // Should have dark green (eyes)
+    expect(colored[1]).toContain('\x1b[32m')
   })
 
   it('each character gets its own reset code', () => {
-    const sprite = SPRITES[13]! // TNT
-    const colored = colorizeSprite(sprite, 13)
+    const sprite = SPRITES[5]! // Skeleton
+    const colored = colorizeSprite(sprite, 5)
     const charCount = [...sprite[0]!].length
     const resets = (colored[0]!.match(/\x1b\[0m/g) ?? []).length
     expect(resets).toBe(charCount)

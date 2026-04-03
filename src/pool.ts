@@ -8,28 +8,28 @@ export const POOL: CompanionEntry[] = [
   { id: 4, name: 'Zombie', rarity: 'common', categories: ['hostile', 'overworld'] },
   { id: 5, name: 'Skeleton', rarity: 'common', categories: ['hostile', 'overworld'] },
   { id: 6, name: 'Cow', rarity: 'common', categories: ['passive', 'overworld'] },
-  { id: 7, name: 'Dirt Block', rarity: 'common', categories: ['overworld'] },
-  { id: 8, name: 'Wooden Sword', rarity: 'common', categories: ['overworld'] },
+  { id: 7, name: 'Sheep', rarity: 'common', categories: ['passive', 'overworld'] },
+  { id: 8, name: 'Slime', rarity: 'common', categories: ['hostile', 'overworld'] },
 
   // Uncommon (5)
   { id: 9, name: 'Spider', rarity: 'uncommon', categories: ['hostile', 'overworld', 'cave'] },
-  { id: 10, name: 'Iron Golem', rarity: 'uncommon', categories: ['neutral', 'overworld'] },
-  { id: 11, name: 'Wolf', rarity: 'uncommon', categories: ['neutral', 'overworld'] },
-  { id: 12, name: 'Iron Sword', rarity: 'uncommon', categories: ['overworld'] },
-  { id: 13, name: 'TNT', rarity: 'uncommon', categories: ['overworld'] },
+  { id: 10, name: 'Wolf', rarity: 'uncommon', categories: ['neutral', 'overworld'] },
+  { id: 11, name: 'Villager', rarity: 'uncommon', categories: ['passive', 'overworld'] },
+  { id: 12, name: 'Bee', rarity: 'uncommon', categories: ['neutral', 'overworld'] },
+  { id: 13, name: 'Witch', rarity: 'uncommon', categories: ['hostile', 'overworld'] },
 
   // Rare (3)
-  { id: 14, name: 'Enderman', rarity: 'rare', categories: ['hostile', 'end', 'overworld'] },
-  { id: 15, name: 'Blaze', rarity: 'rare', categories: ['hostile', 'nether'] },
-  { id: 16, name: 'Diamond Sword', rarity: 'rare', categories: ['cave'] },
+  { id: 14, name: 'Iron Golem', rarity: 'rare', categories: ['neutral', 'overworld'] },
+  { id: 15, name: 'Enderman', rarity: 'rare', categories: ['hostile', 'end', 'overworld'] },
+  { id: 16, name: 'Blaze', rarity: 'rare', categories: ['hostile', 'nether'] },
 
   // Epic (2)
-  { id: 17, name: 'Wither Skeleton', rarity: 'epic', categories: ['hostile', 'nether'] },
-  { id: 18, name: 'Warden', rarity: 'epic', categories: ['hostile', 'cave'] },
+  { id: 17, name: 'Ghast', rarity: 'epic', categories: ['hostile', 'nether'] },
+  { id: 18, name: 'Wither Skeleton', rarity: 'epic', categories: ['hostile', 'nether'] },
 
   // Legendary (1)
-  { id: 19, name: 'Ender Dragon', rarity: 'legendary', categories: ['hostile', 'end'] },
+  { id: 19, name: 'Warden', rarity: 'legendary', categories: ['hostile', 'cave'] },
 
   // Mythical (1)
-  { id: 20, name: 'Dragon Egg', rarity: 'mythical', categories: ['end'] },
+  { id: 20, name: 'Ender Dragon', rarity: 'mythical', categories: ['hostile', 'end'] },
 ]
