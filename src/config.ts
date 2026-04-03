@@ -1,7 +1,7 @@
 import { roll, DEFAULT_RARITY_WEIGHTS } from 'claude-companion-core'
 import type { HookConfig } from 'claude-companion-core/hooks'
 import { POOL } from './pool.js'
-import { SPRITES } from './sprites.js'
+import { SPRITES, colorizeSprite } from './sprites.js'
 import { QUIP_POOL } from './quips.js'
 import { buildPrompt } from './prompt.js'
 
@@ -19,7 +19,8 @@ export function getConfig(): HookConfig {
     pool: POOL,
   })
 
-  const sprite = SPRITES[companion.entry.id] ?? ['⠀⠀⠀', '⠀⠀⠀', '⠀⠀⠀']
+  const rawSprite = SPRITES[companion.entry.id] ?? ['⠀⠀⠀', '⠀⠀⠀', '⠀⠀⠀']
+  const sprite = colorizeSprite(rawSprite, companion.entry.id)
 
   return {
     companionName: companion.entry.name,

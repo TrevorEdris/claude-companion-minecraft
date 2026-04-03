@@ -6,7 +6,7 @@
  */
 
 import { POOL } from '../dist/pool.js'
-import { SPRITES } from '../dist/sprites.js'
+import { SPRITES, colorizeSprite } from '../dist/sprites.js'
 import { invertSprite, defaultAnimation, renderStatusLine } from 'claude-companion-core/statusline'
 
 const FRAME_MS = 300
@@ -24,9 +24,10 @@ function sleep(ms) {
 }
 
 async function previewCompanion(entry) {
-  const sprite = SPRITES[entry.id]
-  if (!sprite) return
+  const rawSprite = SPRITES[entry.id]
+  if (!rawSprite) return
 
+  const sprite = colorizeSprite(rawSprite, entry.id)
   const animation = defaultAnimation(sprite)
   const startTime = Date.now()
 
