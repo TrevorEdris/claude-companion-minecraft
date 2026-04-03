@@ -35,7 +35,7 @@ describe('getConfig', () => {
     const { getConfig } = await import('../src/config.js')
     const config = getConfig()
     expect(config.statuslineSprite).toBeDefined()
-    expect(config.statuslineSprite).toHaveLength(3)
+    expect(config.statuslineSprite).toHaveLength(5)
   })
 
   it('has a statusline state file path', async () => {

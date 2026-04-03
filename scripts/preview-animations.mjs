@@ -7,11 +7,11 @@
 
 import { POOL } from '../dist/pool.js'
 import { SPRITES, colorizeSprite } from '../dist/sprites.js'
-import { invertSprite, defaultAnimation, renderStatusLine } from 'claude-companion-core/statusline'
+import { invertSprite, defaultAnimation } from 'claude-companion-core/statusline'
 
+const SPRITE_LINES = 5
 const FRAME_MS = 300
 const COMPANION_DISPLAY_MS = 3000
-const LINES = 5 // 3 sprite + 1 separator + 1 info
 
 function clearLines(n) {
   for (let i = 0; i < n; i++) {
@@ -21,6 +21,18 @@ function clearLines(n) {
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+function renderFrame(frame, name, quip) {
+  const lines = []
+  for (let i = 0; i < SPRITE_LINES; i++) {
+    const spriteLine = frame[i] ?? ''
+    let text = ''
+    if (i === 0) text = `  ${name}`
+    if (i === 1) text = `  ${quip}`
+    lines.push(`${spriteLine}${text}`)
+  }
+  return lines.join('\n')
 }
 
 async function previewCompanion(entry) {
@@ -35,31 +47,25 @@ async function previewCompanion(entry) {
   process.stdout.write(`\x1b[36m[${entry.rarity.toUpperCase()}]\x1b[0m ${entry.name} (${entry.categories.join(', ')})\n`)
 
   // Print initial frame
-  const state = {
-    companionName: entry.name,
-    quip: `${entry.name} is showing off`,
-    category: 'idle',
-    timestamp: startTime,
-    shiny: false,
-    rarity: entry.rarity,
-    animation,
-    idleQuip: `${entry.name} is just vibing`,
-  }
+  const quip = `${entry.name} is showing off`
+  const idleQuip = `${entry.name} is just vibing`
+  process.stdout.write(renderFrame(animation.frames[0], entry.name, quip) + '\n')
 
-  const initialOutput = renderStatusLine(state, { now: startTime })
-  process.stdout.write(initialOutput + '\n')
-
-  // Animate for COMPANION_DISPLAY_MS
+  // Animate
   while (Date.now() - startTime < COMPANION_DISPLAY_MS) {
     await sleep(FRAME_MS)
-    // Clear the 3 sprite lines
-    clearLines(3)
-    const output = renderStatusLine(state, { now: Date.now() })
-    process.stdout.write(output + '\n')
+    clearLines(SPRITE_LINES)
+    const elapsed = Date.now() - startTime
+    const isAnimating = elapsed < 2000
+    const frameIndex = isAnimating
+      ? Math.floor(elapsed / FRAME_MS) % animation.frames.length
+      : 0
+    const currentQuip = isAnimating ? quip : idleQuip
+    process.stdout.write(renderFrame(animation.frames[frameIndex], entry.name, currentQuip) + '\n')
   }
 
-  // Clear all lines (header + 3 sprite lines)
-  clearLines(4)
+  // Clear header + sprite
+  clearLines(SPRITE_LINES + 1)
 }
 
 async function main() {
