@@ -1,0 +1,45 @@
+{
+  "name": "claude-companion-minecraft",
+  "version": "0.0.1",
+  "description": "Minecraft companion plugin for Claude Code — statusline sprites, quips, and animations",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "plugin"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "companion",
+    "minecraft",
+    "plugin",
+    "statusline",
+    "braille",
+    "ascii-art"
+  ],
+  "author": "TrevorEdris",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrevorEdris/claude-companion-minecraft.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "claude-companion-core": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
